@@ -29,7 +29,7 @@ public class LibrosXQuery {
             XQueryService xqs = (XQueryService) col.getService("XQueryService", "1.0");
             xqs.setProperty("indent", "yes");
 
-            CompiledExpression compiled = xqs.compile("/bookstore/book/author");
+            CompiledExpression compiled = xqs.compile("/bookstore/book/year");
             ResourceSet result = xqs.execute(compiled);
             ResourceIterator i = result.getIterator();
             Resource res = null;
