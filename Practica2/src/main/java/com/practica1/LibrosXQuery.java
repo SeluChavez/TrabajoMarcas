@@ -11,7 +11,7 @@ public class LibrosXQuery {
 
     /**
      * args[0] Should be the name of the collection to access
-     * args[1] Should be the XQuery to execute
+     * args[1] Should be the name of the resource to read from the collection
      */
     public static void main(String args[]) throws Exception {
 
@@ -26,11 +26,10 @@ public class LibrosXQuery {
         Collection col = null;
         try {
             col = DatabaseManager.getCollection("xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/dashboard/resources/libros");
-            XQueryService xqs = (XQueryService) col.getService("XQueryService", "1.0");
-            xqs.setProperty("indent", "yes");
+            XPathQueryService xpqs = (XPathQueryService)col.getService("XPathQueryService", "1.0");
+            xpqs.setProperty("indent", "yes");
 
-            CompiledExpression compiled = xqs.compile("/");
-            ResourceSet result = xqs.execute(compiled);
+            ResourceSet result = xpqs.query("/bookstore/book/author");
             ResourceIterator i = result.getIterator();
             Resource res = null;
             while(i.hasMoreResources()) {
@@ -39,7 +38,7 @@ public class LibrosXQuery {
                     System.out.println(res.getContent());
                 } finally {
                     //dont forget to cleanup resources
-        //            try { ((EXistResource)res).freeResources(); } catch(XMLDBException xe) {xe.printStackTrace();}
+                    //try { ((EXistResource)res).freeResources(); } catch(XMLDBException xe) {xe.printStackTrace();}
                 }
             }
         } finally {
